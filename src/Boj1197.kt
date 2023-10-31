@@ -11,16 +11,13 @@ fun main(args: Array<String>) = with(BufferedReader(InputStreamReader(System.`in
 
     val ve = readLine().split(' ').map { it.toInt() }
 
-//    val nodes = Array(ve[0]+1){Int.MAX_VALUE}
     parents = Array<Int>(ve[0]+1){it}
     var answer = 0
 
-
-    val pq = PriorityQueue<Vertex> { o1, o2 -> o1.weight - o2.weight }
+    val pq = PriorityQueue<Edge> { o1, o2 -> o1.weight - o2.weight }
     for(i in 1..ve[1]){
-        val vertex = readLine().split(' ').map { it.toInt() }
-
-        pq.add(Vertex(vertex[0],vertex[1],vertex[2]))
+        val edge = readLine().split(' ').map { it.toInt() }
+        pq.add(Edge(edge[0],edge[1],edge[2]))
     }
 
     var cnt = ve[0]-1
@@ -33,10 +30,10 @@ fun main(args: Array<String>) = with(BufferedReader(InputStreamReader(System.`in
         answer+=v.weight
         cnt-=1
     }
-
+    
     println(answer)
-
 }
+
 fun union(from:Int, to:Int) {
     val a = findParent(from)
     val b = findParent(to)
@@ -48,7 +45,8 @@ fun findParent(child:Int):Int{
     if(parents[child] == child) return child
     return findParent(parents[child])
 }
-data class Vertex(
+
+data class Edge(
         val from:Int,
         val to:Int,
         val weight:Int
