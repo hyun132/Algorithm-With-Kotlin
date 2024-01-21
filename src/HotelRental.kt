@@ -1,6 +1,6 @@
 import kotlin.collections.ArrayList
 
-class HotelRent {
+class HotelRental {
     fun solution(book_time: Array<Array<String>>) {
         val reserve = ArrayList<ReservationTime>()
         for (one in book_time) {
