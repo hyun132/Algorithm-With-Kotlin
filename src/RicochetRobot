@@ -1,0 +1,64 @@
+class RicochetRobot {
+
+    lateinit var goal: Point
+    val dy = arrayOf(-1, 1, 0, 0)
+    val dx = arrayOf(0, 0, -1, 1)
+    fun solution(board: Array<String>): Int {
+        var answer: Int = -1
+        var robot: Point = Point(0, 0)
+        val visited = Array(board.size) { Array(board[0].length) { false } }
+        for (y in board.indices) {
+            for (x in board[0].indices) {
+                if (board[y][x] == 'G') goal = Point(y, x)
+                else if (board[y][x] == 'R') robot = Point(y, x)
+            }
+        }
+
+        val q = ArrayDeque<Point>()
+        q.add(robot)
+        visited[robot.y][robot.x] = true
+
+        var cur: Point
+        while (q.isNotEmpty()) {
+            answer++
+            val size = q.size
+            for (i in 0 until size) {
+                cur = q.removeFirst()
+                if (cur == goal) return answer
+                for (d in 0 until 4) {
+                    var nxt = cur.next(dy[d], dx[d])
+                    var flag = nxt
+                    while (nxt.isInBound(visited.size, visited[0].size) && board[nxt.y][nxt.x] != 'D') {
+                        flag = nxt
+                        nxt = nxt.next(dy[d], dx[d])
+                    }
+                    if (flag.isInBound(
+                            visited.size,
+                            visited[0].size
+                        ) && board[flag.y][flag.x] != 'D' && !visited[flag.y][flag.x]
+                    ) {
+                        visited[flag.y][flag.x] = true
+                        q.add(flag)
+                    }
+                }
+
+            }
+        }
+
+
+        return -1
+    }
+
+    data class Point(
+        var y: Int,
+        var x: Int
+    ) {
+        fun next(dy: Int, dx: Int): Point {
+            return Point(y + dy, x + dx)
+        }
+
+        fun isInBound(limitY: Int, limitX: Int): Boolean {
+            return !(0 > x || x >= limitX || y < 0 || y >= limitY)
+        }
+    }
+}
