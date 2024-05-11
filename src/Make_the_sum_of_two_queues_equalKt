@@ -1,0 +1,39 @@
+class Solution {
+    fun solution(queue1: IntArray, queue2: IntArray): Int {
+        var answer: Int = 0
+
+        var q1 = queue1
+        var q2 = queue2
+
+        if ((queue1.sum() - queue2.sum())%2!=0) return -1
+        var diffA = (queue1.sum() - queue2.sum()) / 2
+
+        var aIdx = 0
+        var bIdx = 0
+
+        while (diffA != 0 && answer <= (queue2.size+queue1.size)*2) {
+            answer+=1
+            if (diffA > 0) diffA -= q1[aIdx++]
+            else diffA += q2[bIdx++]
+
+            if (aIdx == q1.size) {
+                val tmp = q2.sliceArray(bIdx..q2.size-1) + q1
+                q1 = q2.sliceArray(0 until bIdx)
+                q2 = tmp
+
+                aIdx=0
+                bIdx=0
+            } else if(bIdx == q2.size) {
+                val tmp = q1.sliceArray(aIdx..q1.size-1) + q2
+                q2 = q1.sliceArray(0 until aIdx)
+                q1 = tmp
+
+                aIdx=0
+                bIdx=0
+            }
+        }
+
+        if(diffA == 0) return answer
+        else return -1
+    }
+}
